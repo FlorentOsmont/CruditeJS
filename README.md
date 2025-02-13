@@ -1,4 +1,4 @@
-# CruditeJS
+# 🥗 CruditeJS
 
 A React library for building datatables with filtering, pagination, and more. Note that CruditeJS works with an API that follows its model (I made mine with Django REST Framework).
 
@@ -96,5 +96,5 @@ Feel free to open issues and pull requests!
 
 ## License
 
-MIT
+This project is licensed under the terms of the [MIT License](LICENSE). See the LICENSE file for details.
 
