@@ -43,6 +43,3 @@ lerna-debug.log
 
 ### Storybook ###
 .storybook-out/
-
-### tsup ###
-tsup.config.ts
