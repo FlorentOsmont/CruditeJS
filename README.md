@@ -8,7 +8,7 @@ A React library for building datatables with filtering, pagination, and more. No
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/crudites-js.git
+git clone https://github.com/FlorentOsmont/CruditeJS.git
 cd crudites-js
 ```
 
