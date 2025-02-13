@@ -1,7 +1,15 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-function Pagination({ queryLimit, setQueryLimit, queryOffset, setQueryOffset, queryCount }) {
+interface PaginationProps {
+    queryLimit: number;
+    setQueryLimit: (limit: number) => void;
+    queryOffset: number;
+    setQueryOffset: (offset: number) => void;
+    queryCount: number;
+}
+
+const Pagination: React.FC<PaginationProps> = ({ queryLimit, setQueryLimit, queryOffset, setQueryOffset, queryCount }) => {
     // Vérification sur la première et dernière page
     const isFirstPage = queryOffset === 0;
     const isLastPage = queryOffset + queryLimit >= queryCount;

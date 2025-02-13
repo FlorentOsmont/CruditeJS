@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Search, Columns3, ListFilter, Download, Plus, Sheet, FileText, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Search, Columns3, ListFilter, Download, Plus, Sheet, FileText, X, Columns } from 'lucide-react';
+import { Column } from '../types';
 
 interface FiltersProps {
     searchTerm: string;
@@ -9,85 +10,69 @@ interface FiltersProps {
 }
 
 const Filters: React.FC<FiltersProps> = ({ searchTerm, setSearchTerm, columns, setColumns }) => {
-    const [openMenu, setOpenMenu] = useState(null)
-    const columnsMenuRef = useRef(null)
-    const exportMenuRef = useRef(null)
-    const filterMenuRef = useRef(null)
+    const [openMenu, setOpenMenu] = useState<string | null>(null);
+    const columnsMenuRef = useRef<HTMLDivElement>(null);
+    const exportMenuRef = useRef<HTMLDivElement>(null);
+    const filterMenuRef = useRef<HTMLDivElement>(null);
 
-    const [queryParamsForExport, setQueryParamsForExport] = useState(null)
+    const [queryParamsForExport, setQueryParamsForExport] = useState<string>("");
 
-    const handleSearchTerm = (event) => {
-        setSearchTerm(event.target.value)
-    }
+    const handleSearchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
     useEffect(() => {
         setQueryParamsForExport(buildQueryParamsWithoutPagination());
-        const handleClickOutside = (event) => {
-            if (openMenu === "columns") {
-                if (columnsMenuRef.current && !columnsMenuRef.current.contains(event.target)) {
-                    setOpenMenu(null)
-                };
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (openMenu === "columns" && columnsMenuRef.current && !columnsMenuRef.current.contains(event.target as Node)) {
+                setOpenMenu(null);
             }
-            if (openMenu === "export") {
-                if (exportMenuRef.current && !exportMenuRef.current.contains(event.target)) {
-                    setOpenMenu(null)
-                };
+            if (openMenu === "export" && exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
+                setOpenMenu(null);
             }
-            if (openMenu === "filters") {
-                if (filterMenuRef.current && !filterMenuRef.current.contains(event.target)) {
-                    setOpenMenu(null)
-                };
+            if (openMenu === "filters" && filterMenuRef.current && !filterMenuRef.current.contains(event.target as Node)) {
+                setOpenMenu(null);
             }
         };
-        document.addEventListener("mousedown", handleClickOutside)
+
+        document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [openMenu, columns]);
 
-    const toggleMenu = (menu) => {
+    const toggleMenu = (menu: string) => {
         setOpenMenu(openMenu === menu ? null : menu);
     };
 
-    const toggleColumn = (column) => {
-        setColumns(prevColumns =>
+    const toggleColumn = (columnKey: string) => {
+        setColumns((prevColumns: Column[]) =>
             prevColumns.map(col =>
-                col.key === column ? { ...col, visible: !col.visible } : col
+                col.key === columnKey ? { ...col, visible: !col.visible } : col
             )
         );
-        console.log(columns)
     };
 
-    const handleFilterChange = (key, newValue) => {
-        setColumns((prevColumns) =>
-            prevColumns.map(col => {
-                if (col.key === key) {
-                    return {
-                        ...col,
-                        value: typeof newValue === "object" ? { ...col.value, ...newValue } : newValue
-                    };
-                }
-                return col;
-            })
+    const handleFilterChange = (key: string, newValue: string | { start?: string; end?: string }) => {
+        setColumns((prevColumns: Column[]) =>
+            prevColumns.map(col =>
+                col.key === key ? { ...col, value: typeof newValue === "object" ? { ...col.value, ...newValue } : newValue } : col
+            )
         );
-        console.log(columns)
     };
 
     const buildQueryParamsWithoutPagination = () => {
         const params = new URLSearchParams();
-
         if (searchTerm) params.append("search", searchTerm);
 
-        // Ajouter les filtres actifs
         columns.forEach(col => {
             if (col.value) {
                 if (col.filter === "dateRange" && typeof col.value === "object") {
-                    // Filtre date avec "start" et "end"
                     if (col.value.start) params.append(`${col.key}_start`, col.value.start);
                     if (col.value.end) params.append(`${col.key}_end`, col.value.end);
                 } else {
-                    // Autres filtres (text, choices, bool)
-                    params.append(col.key, col.value);
+                    params.append(col.key, col.value as string);
                 }
             }
         });
