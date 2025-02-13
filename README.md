@@ -6,16 +6,37 @@ A React library for building CRUD tables with filtering and pagination capabilit
 
 ## Installation
 
+1. Clone the repository:
 ```bash
-git clone https://github.com/FlorentOsmont/CruditeJS.git
+git clone https://github.com/your-username/crudites-js.git
 cd crudites-js
+```
+
+2. Install dependencies:
+```bash
 npm install
+```
+
+3. Build the library:
+```bash
+npm run build
+```
+
+4. Link the library for local development:
+```bash
+npm link
+```
+
+5. In your project directory, link to the library:
+```bash
+cd your-project
+npm link crudites-js
 ```
 
 ## Quick Start
 
 ```jsx
-import { Crudite } from "./path-to-crudites-js/src";
+import { Crudite } from "crudites-js";
 
 const config = {
   apiUrl: "your-api-endpoint",
@@ -38,6 +59,21 @@ function App() {
 - Customizable via Tailwind CSS
 - CRUD actions
 
+## Development
+
+1. Start the development build:
+```bash
+npm run dev
+```
+
+2. When making changes to the library while developing your main project:
+```bash
+# In the library directory
+npm run build
+
+# The changes will automatically be reflected in your linked project
+```
+
 ## Complete Example
 
 Here's a comprehensive example showing all available features:
@@ -46,7 +82,7 @@ Here's a comprehensive example showing all available features:
 "use client";
 
 import React from "react";
-import { Crudite } from "./path-to-crudites-js/src";
+import { Crudite } from "crudites-js";
 
 const cruditeConfig = {
   apiUrl: "http://127.0.0.1:8000/api/animals/",
@@ -136,12 +172,6 @@ export default App;
 - `boolean`: Boolean field with true/false filter
 - `choices`: Field with predefined choices
 - `actions`: Action buttons column
-
-## Development
-
-```bash
-npm run dev
-```
 
 ## Contributing
 
